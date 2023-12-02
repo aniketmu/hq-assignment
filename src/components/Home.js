@@ -12,6 +12,7 @@ const Home = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [editingRow, setEditingRow] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [clearCount, setClearCount] = useState(1)
   const [selectChecked, setSelectChecked] = useState(false);
   const itemsPerPage = 10;
 
@@ -38,6 +39,7 @@ const Home = () => {
   const searchUser = () => {
     if (searchTerm.trim() === "") {
       setLocalData(userData);
+      setClearCount((prev) => prev + 1)
       setCurrentPage(1)
     } else {
       setCurrentPage(1)
@@ -56,7 +58,8 @@ const Home = () => {
   const handleSearchInput = (e) => {
     if (e.key === "Enter") {
       if (searchTerm.trim() === "") {
-        setLocalData(userData);
+        setLocalData(userData);  // Reset to original data when search term is empty
+        setCurrentPage(1);  // Reset the current page to the first page
         setSearchTerm("");
       } else {
         searchUser();
@@ -65,6 +68,7 @@ const Home = () => {
       setSearchTerm(e.target.value);
     }
   };
+  
 
   const deleteRow = (rowId) => {
     if (checkedRows.includes(rowId)) {
@@ -73,9 +77,10 @@ const Home = () => {
       setUserData((prev) => updatedMem);
       setLocalData((prev) => updated);
   
-      // Adjust current page if it exceeds the new total pages
-      if (currentPage > Math.ceil(updated.length / itemsPerPage)) {
-        setCurrentPage(Math.ceil(updated.length / itemsPerPage));
+      // Adjust current page only if the current page becomes empty
+      if (currentItems.length === 1) {
+        const newPage = Math.max(currentPage - 1, 1);
+        setCurrentPage(newPage);
       }
   
       setCheckedRows((prev) => [...prev.filter((row_id) => row_id !== rowId)]);
@@ -97,9 +102,10 @@ const Home = () => {
       setUserData(updatedMem);
       setLocalData(updated);
   
-      // Adjust current page if it exceeds the new total pages
-      if (currentPage > Math.ceil(updated.length / itemsPerPage)) {
-        setCurrentPage(Math.ceil(updated.length / itemsPerPage));
+      // Adjust current page only if the current page becomes empty
+      if (currentItems.length === checkedRows.length) {
+        const newPage = Math.max(currentPage - 1, 1);
+        setCurrentPage(newPage);
       }
   
       setCheckedRows([]);
@@ -130,8 +136,9 @@ const Home = () => {
   };
 
   // useEffect(() => {
-  //   setCurrentPage(1); 
-  // }, [localData]);
+  //   setCurrentPage(1);
+  // }, [clearCount]);
+  
 
   useEffect(() => {
     const fetchData = async () => {
