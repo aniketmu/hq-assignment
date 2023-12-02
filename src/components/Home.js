@@ -1,32 +1,11 @@
-import './App.css';
-import { useState, useEffect } from 'react'
-import Admin from './components/Admin';
-import Home from './components/Home';
-import Search from './components/Search';
-import Pagination from './components/Pagination';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import trash from "./delete.png";
-import edit from "./edit.png";
-import search from "./search.png";
-import save from "./save.png";
+import React, { useState, useEffect } from "react";
+import trash from "../delete.png";
+import edit from "../edit.png";
+import search from "../search.png";
+import save from "../save.png";
+import "./Home.css";
 
-
-
-// function App() {
-//   return (
-//     <BrowserRouter>
-//     <Routes>
-//       <Route path='/admin' element={<Admin/>}/>
-//       <Route path='/home' element={<Home/>}/>
-//       <Route path='/search' element={<Search/>}/>
-//       <Route path='/page' element={<Pagination/>}/>
-//     </Routes>
-//     </BrowserRouter>
-//   );
-// }
-
-const App = () => {
-  
+const Home = () => {
   const [checkedRows, setCheckedRows] = useState([]);
   const [userData, setUserData] = useState([]);
   const [localData, setLocalData] = useState(userData);
@@ -376,6 +355,6 @@ const App = () => {
       </div>
     </div>
   );
-}
+};
 
-export default App;
+export default Home;

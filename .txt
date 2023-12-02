@@ -1,32 +1,29 @@
-import './App.css';
-import { useState, useEffect } from 'react'
-import Admin from './components/Admin';
-import Home from './components/Home';
-import Search from './components/Search';
-import Pagination from './components/Pagination';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import trash from "./delete.png";
-import edit from "./edit.png";
-import search from "./search.png";
-import save from "./save.png";
+1. Column titles must stand out from the entries. ✅
+2. There should be a search bar that can filter on any property. ✅
+3. You should be able to edit or delete rows in place.(There is no expectation of persistence. Edit and delete are expected to only happen in memory.) ✅
+4. You need to implement pagination: Each page contains 10 rows. Buttons at the bottom allow you to jump to any page including special buttons for first page, previous page, next page and last page. Pagination must update based on search/filtering. If there are 25 records for example that match a search query, then pagination buttons should only go till 3. ✅
+5. You should be able to select one or more rows. A selected row is highlighted with a grayish background color. Multiple selected rows can be deleted at once using the 'Delete Selected' button at the top right bin icon.✅
+6. Checkbox on the top left is a shortcut to select or deselect all displayed rows. This should only apply to the ten rows displayed in the current page, and not all 50 rows.✅
+7. Search box placeholder text should start with Search.✅
+8. Search icon/button should have class as search-icon OR trigger search on ENTER.✅
+9. Action element must be a button with a specific class name like edit, delete, save.✅
+10. Navigation elements must be a div/button, and should have class name as first-page, previous-page, next-page and last-page and page numbers should be mentioned accordingly.✅
+11. On clicking edit action in a row, it should be editable in the row itself.✅
+12. feel free to use any libraries.
+13. On executing, your application should be running successfully on deployed on vercel, netlify or any similar platform. 
+14. after completing deployment. please submit [here](https://forms.gle/XAhSahQMFBayF6gq7).
+
+///
 
 
+import React, { useState, useEffect } from "react";
+import trash from "../delete.png";
+import edit from "../edit.png";
+import search from "../search.png";
+import save from "../save.png";
+import "./Home.css";
 
-// function App() {
-//   return (
-//     <BrowserRouter>
-//     <Routes>
-//       <Route path='/admin' element={<Admin/>}/>
-//       <Route path='/home' element={<Home/>}/>
-//       <Route path='/search' element={<Search/>}/>
-//       <Route path='/page' element={<Pagination/>}/>
-//     </Routes>
-//     </BrowserRouter>
-//   );
-// }
-
-const App = () => {
-  
+const Home = () => {
   const [checkedRows, setCheckedRows] = useState([]);
   const [userData, setUserData] = useState([]);
   const [localData, setLocalData] = useState(userData);
@@ -59,9 +56,7 @@ const App = () => {
   const searchUser = () => {
     if (searchTerm.trim() === "") {
       setLocalData(userData);
-      setCurrentPage(1)
     } else {
-      setCurrentPage(1)
       const lowerSearchTerm = searchTerm.toLowerCase();
       const filteredUsers = userData.filter((user) =>
         Object.values(user).some(
@@ -89,22 +84,16 @@ const App = () => {
 
   const deleteRow = (rowId) => {
     if (checkedRows.includes(rowId)) {
-      const updated = localData.filter((user) => user.id !== rowId);
+      const updated = localData.filter((user) => user.id !== rowId); // Use localData here
       const updatedMem = userData.filter((user) => user.id !== rowId);
       setUserData((prev) => updatedMem);
       setLocalData((prev) => updated);
-  
-      // Adjust current page if it exceeds the new total pages
-      if (currentPage > Math.ceil(updated.length / itemsPerPage)) {
-        setCurrentPage(Math.ceil(updated.length / itemsPerPage));
-      }
-  
       setCheckedRows((prev) => [...prev.filter((row_id) => row_id !== rowId)]);
     } else {
       return;
     }
   };
-  
+
   const deleteMultipleRows = () => {
     if (checkedRows.length === 0) {
       return;
@@ -117,17 +106,10 @@ const App = () => {
       );
       setUserData(updatedMem);
       setLocalData(updated);
-  
-      // Adjust current page if it exceeds the new total pages
-      if (currentPage > Math.ceil(updated.length / itemsPerPage)) {
-        setCurrentPage(Math.ceil(updated.length / itemsPerPage));
-      }
-  
       setCheckedRows([]);
       setSelectChecked(false);
     }
   };
-  
 
   const startEditing = (rowId) => {
     if (checkedRows.includes(rowId)) {
@@ -144,15 +126,13 @@ const App = () => {
 
   const handlePageChange = (page) => {
     setCheckedRows([]);
-    if (page <= totalPages && page >= 1) {
-      setCurrentPage(page);
-    }
+    setCurrentPage(page);
     setSelectChecked(false);
   };
 
-  // useEffect(() => {
-  //   setCurrentPage(1); 
-  // }, [localData]);
+  useEffect(() => {
+    setCurrentPage(1); 
+  }, [localData]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -234,13 +214,6 @@ const App = () => {
                               : u
                           )
                         );
-                        setUserData((prevData) =>
-                        prevData.map((u) =>
-                          u.id === user.id
-                            ? { ...u, name: e.target.value }
-                            : u
-                        )
-                      );
                       }}
                     />
                   ) : (
@@ -376,6 +349,6 @@ const App = () => {
       </div>
     </div>
   );
-}
+};
 
-export default App;
+export default Home;
