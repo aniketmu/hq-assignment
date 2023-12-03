@@ -64,6 +64,7 @@ const App = () => {
     } else {
       
       setClearCount((prev) => prev + 1)
+      console.log(searchTerm)
       const lowerSearchTerm = searchTerm.toLowerCase();
       const filteredUsers = userData.filter((user) =>
         Object.values(user).some(
@@ -182,7 +183,7 @@ const App = () => {
     <div className="container">
       <div className="table-container">
         <div className="input-container">
-          <input placeholder="Search" onKeyDown={handleSearchInput} />
+          <input placeholder="Search" onKeyUp={handleSearchInput} />
           <img
             src={search}
             onClick={searchUser}
@@ -207,7 +208,7 @@ const App = () => {
               <th>Action</th>
             </tr>
           </thead>
-          <tbody>
+          {userData.length != 0 ? <tbody>
             {currentItems.map((user) => (
               <tr
                 key={user.id}
@@ -267,6 +268,13 @@ const App = () => {
                               : u
                           )
                         );
+                        setUserData((prevData) =>
+                        prevData.map((u) =>
+                          u.id === user.id
+                            ? { ...u, email: e.target.value }
+                            : u
+                        )
+                      );
                       }}
                     />
                   ) : (
@@ -285,6 +293,13 @@ const App = () => {
                               : u
                           )
                         );
+                        setUserData((prevData) =>
+                        prevData.map((u) =>
+                          u.id === user.id
+                            ? { ...u, role: e.target.value }
+                            : u
+                        )
+                      );
                       }}
                     >
                       <option value="admin">Admin</option>
@@ -336,7 +351,11 @@ const App = () => {
                 </td>
               </tr>
             ))}
-          </tbody>
+          </tbody> : <div className="spinner-container">
+      <div className="loading-spinner">
+      </div>
+    </div> }
+          
         </table>
         <div className="pagination-container">
           <button
@@ -374,7 +393,7 @@ const App = () => {
           </button>
           <button
             onClick={() => handlePageChange(totalPages)}
-            disabled={currentPage === totalPages}
+            disabled={currentPage === totalPages || (currentPage === totalPages && (currentItems.length - itemsPerPage < 10)) || currentItems.length == 0}
             className="last-page"
           >
             Last Page
