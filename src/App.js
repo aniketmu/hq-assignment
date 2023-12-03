@@ -1,29 +1,10 @@
 import './App.css';
 import { useState, useEffect } from 'react'
-import Admin from './components/Admin';
-import Home from './components/Home';
-import Search from './components/Search';
-import Pagination from './components/Pagination';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import trash from "./delete.png";
 import edit from "./edit.png";
 import search from "./search.png";
 import save from "./save.png";
 
-
-
-// function App() {
-//   return (
-//     <BrowserRouter>
-//     <Routes>
-//       <Route path='/admin' element={<Admin/>}/>
-//       <Route path='/home' element={<Home/>}/>
-//       <Route path='/search' element={<Search/>}/>
-//       <Route path='/page' element={<Pagination/>}/>
-//     </Routes>
-//     </BrowserRouter>
-//   );
-// }
 
 const App = () => {
   const [checkedRows, setCheckedRows] = useState([]);
@@ -208,7 +189,7 @@ const App = () => {
               <th>Action</th>
             </tr>
           </thead>
-          {userData.length != 0 ? <tbody>
+          {userData.length !== 0 ? <tbody>
             {currentItems.map((user) => (
               <tr
                 key={user.id}
@@ -385,7 +366,7 @@ const App = () => {
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={
-              currentItems.length < itemsPerPage || currentItems.length === 0
+              currentItems.length < itemsPerPage || currentItems.length === 0 ||currentPage == totalPages
             }
             className="next-page"
           >
@@ -393,7 +374,7 @@ const App = () => {
           </button>
           <button
             onClick={() => handlePageChange(totalPages)}
-            disabled={currentPage === totalPages || (currentPage === totalPages && (currentItems.length - itemsPerPage < 10)) || currentItems.length == 0}
+            disabled={currentPage === totalPages || (currentPage === totalPages && (currentItems.length - itemsPerPage < 10)) || currentItems.length === 0}
             className="last-page"
           >
             Last Page
